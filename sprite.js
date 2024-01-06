@@ -31,6 +31,9 @@ let playerHit = false;
 
 let gameOver = false; // Variable to track game over state
 
+var meterTotStop = 800;
+let distanceToStopEnd;
+
 // --------------------------------------------------------------------------------------------------------- PRELOAD
 
 function preload() {
@@ -45,6 +48,8 @@ function preload() {
   ninjaProne = loadImage('spriteFotos/BninjaProne.png');
 
   heartImage = loadImage('spriteFotos/Hartje.png'); // Load heart image
+
+  stopEnd = loadImage('spriteFotos/stopEnd.png');
 }
 
 // --------------------------------------------------------------------------------------------------------- SETUP
@@ -80,9 +85,11 @@ function draw() {
   if (keyIsDown(RIGHT_ARROW)) {
     bgX -= 2;
     Enemy.speed = Enemy.speed + 2;
+    meterTotStop -= 2;
   } else if (keyIsDown(LEFT_ARROW)) {
     bgX += 2;
     Enemy.speed = Enemy.speed + 2;
+    meterTotStop += 2;
   }
 
   bg.resize(1200, 600);
@@ -90,6 +97,18 @@ function draw() {
   image(bg, bgPosX, bgPosY);
   image(bg, bgPosX + 1200, bgPosY);
 
+  // ----------------------------------------------------------------------------------------------------- END STOP
+
+  distanceToStopEnd = abs(width / 2.5 - meterTotStop);
+
+  if (enemiesHit >= maxVisibleEnemies) {
+    stopEnd.resize(70, 160)
+    image(stopEnd, meterTotStop, height - 260);
+    updateDistanceIndicator(distanceToStopEnd);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------
+  
   if (isJumping) {
     yPos += ySpeed;
     ySpeed += 0.5;
@@ -180,12 +199,11 @@ function draw() {
     }
   }
 
-  // ----------------------------------------------------------------------------------------------------- LIVES CHECK
+  // -------------------------------------------------------------------------------------------------------- CHECKS
   
   if (lives <= 0) {
     gameOver = true;
   }
-
 
   displayLives();
   removeOffscreenEnemies();
@@ -351,6 +369,19 @@ function resetGame() {
   bgX = 0; // Reset bgX after resizing
 }
 
+// --------------------------------------------------------------------------------------------------- DISTANCE
 
+function updateDistanceIndicator(distanceToStopEnd) {
+  push();
+  fill(225, 225, 0, 220);
+  noStroke();
+  rect(width - 200, height - 150, 70, 30, 20); // Display the yellow block
+
+  fill(0);
+  textSize(15);
+  textAlign(CENTER, CENTER);
+  text(nf(distanceToStopEnd, 0, 0) + "m", width - 165, height - 135); // Display the text
+  pop();
+}
 
 
