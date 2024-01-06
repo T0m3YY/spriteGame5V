@@ -1,5 +1,5 @@
 let img;
-let currentImageIndex = 0;
+var currentImageIndex = 0;
 let images = [];
 
 let lastKeyPressTime = 0;
@@ -16,19 +16,38 @@ var bg;
 
 h = 120;
 
-let enemies = [];
+let visibleEnemies = [];
 let lastEnemySpawnTime = 0;
 let enemySpawnInterval; // interval tussen spawns in milliseconden (5 seconden)
 
 let enemyImage;
+let maxVisibleEnemies = 10;
+let currentEnemies = 0;
+
+let lives = 5; // Initial number of lives
+let enemiesHit = 0; // Counter for enemies hit
+
+let playerHit = false;
+
+let gameOver = false; // Variable to track game over state
+
+// --------------------------------------------------------------------------------------------------------- PRELOAD
 
 function preload() {
   bg = loadImage("spriteFotos/background1.jpg");
+
   for (let i = 0; i < 4; i++) {
     images[i] = loadImage('spriteFotos/Bninja' + (i + 1) + '.png');
   }
   enemyImage = loadImage('spriteFotos/Enemy.png');
+  enemyImageDis = loadImage('spriteFotos/Enemy.png');
+
+  ninjaProne = loadImage('spriteFotos/BninjaProne.png');
+
+  heartImage = loadImage('spriteFotos/Hartje.png'); // Load heart image
 }
+
+// --------------------------------------------------------------------------------------------------------- SETUP
 
 function setup() {
   createCanvas(1200, 600);
@@ -38,12 +57,15 @@ function setup() {
   ySpeed = 0;
   isJumping = false;
 
-  // Voeg een startvijand toe
-  spawnEnemy();
+  spawnEnemy(); // Initial spawn of enemy
+  displayLives();
+
 }
 
+// --------------------------------------------------------------------------------------------------------- DRAW
 function draw() {
   clear();
+
   background('green');
 
   if (bgX > 0) {
@@ -57,8 +79,10 @@ function draw() {
 
   if (keyIsDown(RIGHT_ARROW)) {
     bgX -= 2;
+    Enemy.speed = Enemy.speed + 2;
   } else if (keyIsDown(LEFT_ARROW)) {
     bgX += 2;
+    Enemy.speed = Enemy.speed + 2;
   }
 
   bg.resize(1200, 600);
@@ -105,20 +129,70 @@ function draw() {
     }
   }
 
-  // Teken vijanden
-  for (let i = 0; i < enemies.length; i++) {
-    enemies[i].update();
-    enemies[i].display();
+  // ----------------------------------------------------------------------------------------------------- GAME OVER
+  
+  if (gameOver) {
+    drawGameOverScreen();
+    if (keyIsDown(ENTER) && millis() - lastKeyPressTime > 5) {
+      resetGame();
+      lastKeyPressTime = millis();
+    }
+    return; // Skip the rest of the draw function when the game is over
   }
 
-  // Verwijder vijanden die uit beeld zijn
+
+  // -------------------------------------------------------------------------------------------------- COLLIDECHECK
+
+  for (let i = 0; i < visibleEnemies.length; i++) {
+    visibleEnemies[i].update();
+    visibleEnemies[i].display();
+
+    if (currentImageIndex === 1) { // Assuming Bninja2.png is the attack image index
+      let attackWidth = images[currentImageIndex].width;
+      let attackHeight = images[currentImageIndex].height;
+      let attackYOffset = 15; // Adjust this value as needed
+
+      if (checkCollision(
+        width / 2.5 - attackWidth / 2, yPos - attackHeight / 2 + attackYOffset, attackWidth, attackHeight - 2 * attackYOffset, // Player attack area
+        visibleEnemies[i].x - visibleEnemies[i].image.width / 2, visibleEnemies[i].y - visibleEnemies[i].image.height / 2, // Enemy area
+        visibleEnemies[i].image.width, visibleEnemies[i].image.height
+      )) {
+        visibleEnemies.splice(i, 1);
+        enemiesHit++;
+      }
+    } else {
+      // Your existing collision check for other images
+      if (checkCollision(
+        width / 2.5 - 40, yPos - 50, 60, 130, // Player rectangle
+        visibleEnemies[i].x - 20, visibleEnemies[i].y - 20, 40, 40 // Enemy rectangle
+      )) {
+        if (!playerHit) {
+          lives -= 1;
+          img = ninjaProne;
+          ninjaProne.resize(80, 100);
+          playerHit = true;
+          setTimeout(() => {
+            img = images[currentImageIndex];
+            playerHit = false;
+          }, 1000);
+        }
+      }
+    }
+  }
+
+  // ----------------------------------------------------------------------------------------------------- LIVES CHECK
+  
+  if (lives <= 0) {
+    gameOver = true;
+  }
+
+
+  displayLives();
   removeOffscreenEnemies();
 
-  // Controleer of het tijd is om een nieuwe vijand te spawnen
-  if (millis() - lastEnemySpawnTime > enemySpawnInterval) {
-    spawnEnemy();
-  }
 }
+
+// --------------------------------------------------------------------------------------------------------- KEYPRESS
 
 function keyPressed() {
   lastKeyPressTime = millis();
@@ -147,51 +221,42 @@ function keyPressed() {
   }
 }
 
+// --------------------------------------------------------------------------------------------------------- SPAWNENEMY
+
 function spawnEnemy() {
-  let randomInterval = random(2000, 5000);
-  enemySpawnInterval = randomInterval;
+  if (visibleEnemies.length < maxVisibleEnemies) {
 
-  let randomX;
+    let randomX = random(700, 1200);
+    let randomY = random(200, height - 100);
 
-  if (direction === -1) {
-    randomX = random(0, 400);
-  } else {
-    randomX = width/2 + random(50, 400);
+    randomX = constrain(randomX, 0, width);
+    randomY = constrain(randomY, 0, height);
+
+    let newEnemy = new Enemy(randomX, randomY, -1);
+    visibleEnemies.push(newEnemy);
+
+    // Herhaal spawnEnemy na een willekeurige tijd
+    setTimeout(spawnEnemy, random(2000, 3000));
   }
-
-  let randomY = random(100, height - 100);
-
-  // Beperk de spawnpositie tot het zichtbare gebied
-  randomX = constrain(randomX, 0, width);
-  randomY = constrain(randomY, 0, height);
-
-  let randomDirection = floor(random(3)) - 1; // -1, 0 of 1
-
-  enemies.push(new Enemy(randomX, randomY, randomDirection));
-
-  lastEnemySpawnTime = millis();
-
-  // Plan de volgende spawn
-  setTimeout(spawnEnemy, enemySpawnInterval);
 }
 
-
 function removeOffscreenEnemies() {
-  for (let i = enemies.length - 1; i >= 0; i--) {
-    if (enemies[i].x < 0 || enemies[i].x > width) {
-      enemies.splice(i, 1);
+  for (let i = visibleEnemies.length - 1; i >= 0; i--) {
+    if (visibleEnemies[i].x < 0 || visibleEnemies[i].x > width) {
+      visibleEnemies.splice(i, 1);
     }
   }
 }
+
+// --------------------------------------------------------------------------------------------------------- ENEMY
 
 class Enemy {
   constructor(x, y, direction) {
     this.x = x;
     this.y = y;
     this.direction = direction;
-    this.speed = random(2,4);
-    this.image = enemyImage; // Gebruik de vooraf geladen en aangepaste afbeelding
-
+    this.speed = 4;
+    this.image = enemyImage;
   }
 
   update() {
@@ -204,8 +269,88 @@ class Enemy {
     scale(this.direction, 1);
 
     image(this.image, 0, 0);
-    this.image.resize(40, 40); // Wijzig de grootte van de vijandafbeelding hier
+    this.image.resize(40, 40);
 
     pop();
   }
 }
+
+// ---------------------------------------------------------------------------------------------------- DISPLAY LIVES
+
+function displayLives() {
+
+  let displayImageX1 = 20; 
+  let displayImageX2 = width - 235; 
+  let displayImageY = 20; 
+
+  let displayTextX1 = 60; 
+  let displayTextX2 = width - 190; 
+
+  let displayTextY = 42;
+
+  // Display levens
+  image(heartImage, displayImageX1, displayImageY);
+  heartImage.resize(30, 30);
+
+  textSize(20);
+  fill(255);
+  text(lives + "/5", displayTextX1, displayTextY);
+ 
+  // Display vijand-hits
+  image(enemyImageDis, displayImageX2, displayImageY);
+  enemyImageDis.resize(30, 30);
+  
+  textSize(20);
+  fill(255);
+  text("Enemies Hit: " + enemiesHit + "/" + maxVisibleEnemies, displayTextX2, displayTextY);
+}
+
+// --------------------------------------------------------------------------------------------------------- COLLIDE
+
+function checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
+  return x1 < x2 + w2 &&
+         x1 + w1 > x2 &&
+         y1 < y2 + h2 &&
+         y1 + h1 > y2;
+}
+
+// -------------------------------------------------------------------------------------------------- GAME OVER SCREEN
+
+function drawGameOverScreen() {
+  push();
+  // Draw a semi-transparent overlay
+  fill(0, 0, 0, 164); // 204 represents 80% transparency
+  rect(0, 0, width, height);
+
+  // Display "GAME OVER" and instructions
+  textAlign(CENTER, CENTER);
+  textSize(60);
+  fill(255);
+  text("GAME OVER", width / 2, height / 2 - 50);
+  textSize(20);
+  text("Press 'Enter' to continue", width / 2, height / 2 + 20);
+  pop();
+}
+
+function resetGame() {
+  gameOver = false;
+  lives = 5;
+  enemiesHit = 0;
+  visibleEnemies = [];
+  spawnEnemy();
+  currentImageIndex = 0;
+  img = images[currentImageIndex];
+  yPos = height - h;
+  ySpeed = 0;
+  isJumping = false;
+  bgX = 0; // Reset bgX to 0
+  direction = 1;
+  playerHit = false;
+  displayLives();
+  bg.resize(1200, 600); // Resize the background image
+  bgX = 0; // Reset bgX after resizing
+}
+
+
+
+
