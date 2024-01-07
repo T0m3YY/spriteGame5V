@@ -18,18 +18,17 @@ h = 120;
 
 let visibleEnemies = [];
 let lastEnemySpawnTime = 0;
-let enemySpawnInterval; // interval tussen spawns in milliseconden (5 seconden)
+let enemySpawnInterval; 
 
 let enemyImage;
-let maxVisibleEnemies = 10;
+let maxVisibleEnemies = 10; //------- data.json
 let currentEnemies = 0;
 
-let lives = 5; // Initial number of lives
-let enemiesHit = 0; // Counter for enemies hit
+let lives = 5; //------- data.json
+let enemiesHit = 0; //------- data.jspn
 
 let playerHit = false;
-
-let gameOver = false; // Variable to track game over state
+let gameOver = false; 
 
 var meterTotStop = 800;
 let distanceToStopEnd;
@@ -182,7 +181,7 @@ function draw() {
     } else {
       // Your existing collision check for other images
       if (checkCollision(
-        width / 2.5 - 40, yPos - 50, 60, 130, // Player rectangle
+        width / 2.5 + 20, yPos - 50, 60, 130, // Player rectangle
         visibleEnemies[i].x - 20, visibleEnemies[i].y - 20, 40, 40 // Enemy rectangle
       )) {
         if (!playerHit) {
@@ -254,7 +253,7 @@ function spawnEnemy() {
     visibleEnemies.push(newEnemy);
 
     // Herhaal spawnEnemy na een willekeurige tijd
-    setTimeout(spawnEnemy, random(2000, 3000));
+    setTimeout(spawnEnemy, random(2000, 3000)); //------- data.json
   }
 }
 
@@ -273,7 +272,7 @@ class Enemy {
     this.x = x;
     this.y = y;
     this.direction = direction;
-    this.speed = 4;
+    this.speed = 4; //------- data.json
     this.image = enemyImage;
   }
 
