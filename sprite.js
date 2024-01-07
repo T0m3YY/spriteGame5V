@@ -12,8 +12,6 @@ let isJumping;
 
 let bgX = 0;
 
-var bg;
-
 h = 120;
 
 let visibleEnemies = [];
@@ -21,11 +19,19 @@ let lastEnemySpawnTime = 0;
 let enemySpawnInterval; 
 
 let enemyImage;
-let maxVisibleEnemies = 10; //------- data.json
 let currentEnemies = 0;
+let maxVisibleEnemies = 15; //------- data.json level
 
-let lives = 5; //------- data.json
-let enemiesHit = 0; //------- data.jspn
+
+var time1ENEMY = 2000; //------- data.json level
+var time2ENEMY = 3000; //------- data.json level
+var speedENEMY = 4;
+
+let lives; //------- data.json level
+let maxLives;
+let levelGame;
+
+let enemiesHit = 0; //------- data.json total/game
 
 let playerHit = false;
 let gameOver = false; 
@@ -33,10 +39,20 @@ let gameOver = false;
 var meterTotStop = 800;
 let distanceToStopEnd;
 
+
+var keyPrRR = 39; //------- data.json controls
+var keyPrRL = 37; //------- data.json controls
+var keyPrJU = 32; //------- data.json controls
+var keyPrAT = 65; //------- data.json controls 
+
 // --------------------------------------------------------------------------------------------------------- PRELOAD
 
 function preload() {
   bg = loadImage("spriteFotos/background1.jpg");
+  
+  // bg2 = loadImage("spriteFotos/background2.jpg");
+
+
 
   for (let i = 0; i < 4; i++) {
     images[i] = loadImage('spriteFotos/Bninja' + (i + 1) + '.png');
@@ -81,11 +97,11 @@ function draw() {
   let bgPosX = (width - bg.width) / 2 + bgX;
   let bgPosY = (height - bg.height) / 2;
 
-  if (keyIsDown(RIGHT_ARROW)) {
+  if (keyIsDown(keyPrRR)) {
     bgX -= 2;
     Enemy.speed = Enemy.speed + 2;
     meterTotStop -= 2;
-  } else if (keyIsDown(LEFT_ARROW)) {
+  } else if (keyIsDown(keyPrRL)) {
     bgX += 2;
     Enemy.speed = Enemy.speed + 2;
     meterTotStop += 2;
@@ -140,7 +156,7 @@ function draw() {
     }
   }
 
-  if (!keyIsDown(RIGHT_ARROW) && !keyIsDown(LEFT_ARROW) && !(keyIsDown(' ') || keyIsDown('a'))) {
+  if (!keyIsDown(keyPrRR) && !keyIsDown(keyPrRL) && !(keyIsDown(keyPrJU) || keyIsDown(keyPrAT))) {
     if (millis() - lastKeyPressTime > switchImageDelay && currentImageIndex !== 0) {
       currentImageIndex = 0;
       img = images[currentImageIndex];
@@ -214,22 +230,22 @@ function draw() {
 function keyPressed() {
   lastKeyPressTime = millis();
 
-  if (keyIsDown(RIGHT_ARROW)) {
+  if (keyIsDown(keyPrRR)) {
     direction = 1;
     currentImageIndex = 2;
     img = images[currentImageIndex];
-  } else if (keyIsDown(LEFT_ARROW)) {
+  } else if (keyIsDown(keyPrRL)) {
     direction = -1;
     currentImageIndex = 2;
     img = images[currentImageIndex];
-  } else if (key === ' ') {
+  } else if (keyIsDown(keyPrJU)) {
     currentImageIndex = 3;
     img = images[currentImageIndex];
     if (!isJumping) {
       ySpeed = -15;
       isJumping = true;
     }
-  } else if (key === 'a') {
+  } else if (keyIsDown(keyPrAT)) {
     currentImageIndex = 1;
     img = images[currentImageIndex];
   } else {
@@ -253,7 +269,7 @@ function spawnEnemy() {
     visibleEnemies.push(newEnemy);
 
     // Herhaal spawnEnemy na een willekeurige tijd
-    setTimeout(spawnEnemy, random(2000, 3000)); //------- data.json
+    setTimeout(spawnEnemy, random(time1ENEMY, time2ENEMY)); //------- data.json level
   }
 }
 
@@ -272,7 +288,7 @@ class Enemy {
     this.x = x;
     this.y = y;
     this.direction = direction;
-    this.speed = 4; //------- data.json
+    this.speed = speedENEMY; //------- data.json level
     this.image = enemyImage;
   }
 
@@ -292,7 +308,7 @@ class Enemy {
   }
 }
 
-// ---------------------------------------------------------------------------------------------------- DISPLAY LIVES
+// ----------------------------------------------------------------------------------------------------- DISPLAY
 
 function displayLives() {
 
@@ -305,15 +321,29 @@ function displayLives() {
 
   let displayTextY = 42;
 
-  // Display levens
+  // ----------------------------------------------------------------- levens
+
   image(heartImage, displayImageX1, displayImageY);
   heartImage.resize(30, 30);
 
   textSize(20);
   fill(255);
-  text(lives + "/5", displayTextX1, displayTextY);
- 
-  // Display vijand-hits
+  text(lives + "/" + maxLives, displayTextX1, displayTextY);
+
+
+  // ----------------------------------------------------------------- level
+
+  fill(0, 0, 0, 130); // 204 represents 80% transparency
+  rect(width/2.5 - 60, displayTextY - 25, 105, displayTextY - 5, 30);
+  noStroke();
+
+  textSize(20);
+  fill(255);
+  text("Level " + levelGame, width/2.5 - 40, displayTextY);
+
+
+  // ----------------------------------------------------------------- vijand 
+
   image(enemyImageDis, displayImageX2, displayImageY);
   enemyImageDis.resize(30, 30);
   
@@ -351,19 +381,25 @@ function drawGameOverScreen() {
 
 function resetGame() {
   gameOver = false;
-  lives = 5;
+
+  lives = maxLives;
+
   enemiesHit = 0;
   visibleEnemies = [];
   spawnEnemy();
+
   currentImageIndex = 0;
   img = images[currentImageIndex];
+
   yPos = height - h;
   ySpeed = 0;
   isJumping = false;
-  bgX = 0; // Reset bgX to 0
+
   direction = 1;
   playerHit = false;
+
   displayLives();
+
   bg.resize(1200, 600); // Resize the background image
   bgX = 0; // Reset bgX after resizing
 }
