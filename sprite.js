@@ -20,7 +20,7 @@ let enemySpawnInterval;
 
 let enemyImage;
 let currentEnemies = 0;
-let maxVisibleEnemies = 15; //------- data.json level
+let maxVisibleEnemies = 10; //------- data.json level
 
 
 var time1ENEMY = 2000; //------- data.json level
@@ -49,10 +49,6 @@ var keyPrAT = 65; //------- data.json controls
 
 function preload() {
   bg = loadImage("spriteFotos/background1.jpg");
-  
-  // bg2 = loadImage("spriteFotos/background2.jpg");
-
-
 
   for (let i = 0; i < 4; i++) {
     images[i] = loadImage('spriteFotos/Bninja' + (i + 1) + '.png');
@@ -71,158 +67,169 @@ function preload() {
 
 function setup() {
   createCanvas(1200, 600);
-  img = images[currentImageIndex];
 
-  yPos = height - h;
-  ySpeed = 0;
-  isJumping = false;
+  if (gameStarted) {
 
-  spawnEnemy(); // Initial spawn of enemy
-  displayLives();
+    shouldRunGameLogic = true;
+
+    img = images[currentImageIndex];
+
+    yPos = height - h;
+    ySpeed = 0;
+    isJumping = false;
+
+    spawnEnemy(); // Initial spawn of enemy
+    displayLives();
+  }
+
+  
 
 }
 
 // --------------------------------------------------------------------------------------------------------- DRAW
 function draw() {
-  clear();
 
-  background('green');
 
-  if (bgX > 0) {
-    bgX = bgX % 1200;
-  } else if (bgX < -1200) {
-    bgX = 0;
-  }
+  if (shouldRunGameLogic) {
+    clear();
 
-  let bgPosX = (width - bg.width) / 2 + bgX;
-  let bgPosY = (height - bg.height) / 2;
+    background('green');
 
-  if (keyIsDown(keyPrRR)) {
-    bgX -= 2;
-    Enemy.speed = Enemy.speed + 2;
-    meterTotStop -= 2;
-  } else if (keyIsDown(keyPrRL)) {
-    bgX += 2;
-    Enemy.speed = Enemy.speed + 2;
-    meterTotStop += 2;
-  }
-
-  bg.resize(1200, 600);
-  image(bg, bgPosX - 1200, bgPosY);
-  image(bg, bgPosX, bgPosY);
-  image(bg, bgPosX + 1200, bgPosY);
-
-  // ----------------------------------------------------------------------------------------------------- END STOP
-
-  distanceToStopEnd = abs(width / 2.5 - meterTotStop);
-
-  if (enemiesHit >= maxVisibleEnemies) {
-    stopEnd.resize(70, 160)
-    image(stopEnd, meterTotStop, height - 260);
-    updateDistanceIndicator(distanceToStopEnd);
-  }
-
-  // -------------------------------------------------------------------------------------------------------------
-  
-  if (isJumping) {
-    yPos += ySpeed;
-    ySpeed += 0.5;
-  }
-
-  if (yPos > height - h) {
-    yPos = height - h;
-    ySpeed = 0;
-    isJumping = false;
-  }
-
-  push();
-  translate(width / 2.5, yPos);
-  scale(direction, 1);
-  imageMode(CENTER);
-  image(img, 0, 0);
-  scale(1 / direction, 1);
-  translate(-width / 2, -yPos);
-  pop();
-
-  for (let i = 0; i < images.length; i++) {
-    if (i === 1) {
-      images[i].resize(210, 100);
-    } else if (i === 0) {
-      images[i].resize(60, 100);
-    } else if (i === 3) {
-      images[i].resize(80, 80);
-    } else {
-      images[i].resize(100, 100);
+    if (bgX > 0) {
+      bgX = bgX % 1200;
+    } else if (bgX < -1200) {
+      bgX = 0;
     }
-  }
 
-  if (!keyIsDown(keyPrRR) && !keyIsDown(keyPrRL) && !(keyIsDown(keyPrJU) || keyIsDown(keyPrAT))) {
-    if (millis() - lastKeyPressTime > switchImageDelay && currentImageIndex !== 0) {
-      currentImageIndex = 0;
-      img = images[currentImageIndex];
+    let bgPosX = (width - bg.width) / 2 + bgX;
+    let bgPosY = (height - bg.height) / 2;
+
+    if (keyIsDown(keyPrRR)) {
+      bgX -= 2;
+      Enemy.speed = Enemy.speed + 2;
+      meterTotStop -= 2;
+    } else if (keyIsDown(keyPrRL)) {
+      bgX += 2;
+      Enemy.speed = Enemy.speed + 2;
+      meterTotStop += 2;
     }
-  }
 
-  // ----------------------------------------------------------------------------------------------------- GAME OVER
-  
-  if (gameOver) {
-    drawGameOverScreen();
-    if (keyIsDown(ENTER) && millis() - lastKeyPressTime > 5) {
-      resetGame();
-      lastKeyPressTime = millis();
+    bg.resize(1200, 600);
+    image(bg, bgPosX - 1200, bgPosY);
+    image(bg, bgPosX, bgPosY);
+    image(bg, bgPosX + 1200, bgPosY);
+
+    // ----------------------------------------------------------------------------------------------------- END STOP
+
+    distanceToStopEnd = abs(width / 2.5 - meterTotStop);
+
+    if (enemiesHit >= maxVisibleEnemies) {
+      stopEnd.resize(70, 160)
+      image(stopEnd, meterTotStop, height - 260);
+      updateDistanceIndicator(distanceToStopEnd);
     }
-    return; // Skip the rest of the draw function when the game is over
-  }
 
+    // -------------------------------------------------------------------------------------------------------------
+    
+    if (isJumping) {
+      yPos += ySpeed;
+      ySpeed += 0.5;
+    }
 
-  // -------------------------------------------------------------------------------------------------- COLLIDECHECK
+    if (yPos > height - h) {
+      yPos = height - h;
+      ySpeed = 0;
+      isJumping = false;
+    }
 
-  for (let i = 0; i < visibleEnemies.length; i++) {
-    visibleEnemies[i].update();
-    visibleEnemies[i].display();
+    push();
+    translate(width / 2.5, yPos);
+    scale(direction, 1);
+    imageMode(CENTER);
+    image(img, 0, 0);
+    scale(1 / direction, 1);
+    translate(-width / 2, -yPos);
+    pop();
 
-    if (currentImageIndex === 1) { // Assuming Bninja2.png is the attack image index
-      let attackWidth = images[currentImageIndex].width;
-      let attackHeight = images[currentImageIndex].height;
-      let attackYOffset = 15; // Adjust this value as needed
-
-      if (checkCollision(
-        width / 2.5 - attackWidth / 2, yPos - attackHeight / 2 + attackYOffset, attackWidth, attackHeight - 2 * attackYOffset, // Player attack area
-        visibleEnemies[i].x - visibleEnemies[i].image.width / 2, visibleEnemies[i].y - visibleEnemies[i].image.height / 2, // Enemy area
-        visibleEnemies[i].image.width, visibleEnemies[i].image.height
-      )) {
-        visibleEnemies.splice(i, 1);
-        enemiesHit++;
+    for (let i = 0; i < images.length; i++) {
+      if (i === 1) {
+        images[i].resize(210, 100);
+      } else if (i === 0) {
+        images[i].resize(60, 100);
+      } else if (i === 3) {
+        images[i].resize(80, 80);
+      } else {
+        images[i].resize(100, 100);
       }
-    } else {
-      // Your existing collision check for other images
-      if (checkCollision(
-        width / 2.5 + 20, yPos - 50, 60, 130, // Player rectangle
-        visibleEnemies[i].x - 20, visibleEnemies[i].y - 20, 40, 40 // Enemy rectangle
-      )) {
-        if (!playerHit) {
-          lives -= 1;
-          img = ninjaProne;
-          ninjaProne.resize(80, 100);
-          playerHit = true;
-          setTimeout(() => {
-            img = images[currentImageIndex];
-            playerHit = false;
-          }, 1000);
+    }
+
+    if (!keyIsDown(keyPrRR) && !keyIsDown(keyPrRL) && !(keyIsDown(keyPrJU) || keyIsDown(keyPrAT))) {
+      if (millis() - lastKeyPressTime > switchImageDelay && currentImageIndex !== 0) {
+        currentImageIndex = 0;
+        img = images[currentImageIndex];
+      }
+    }
+
+    // ----------------------------------------------------------------------------------------------------- GAME OVER
+    
+    if (gameOver) {
+      drawGameOverScreen();
+      if (keyIsDown(ENTER) && millis() - lastKeyPressTime > 5) {
+        resetGame();
+        lastKeyPressTime = millis();
+      }
+      return; // Skip the rest of the draw function when the game is over
+    }
+
+
+    // -------------------------------------------------------------------------------------------------- COLLIDECHECK
+
+    for (let i = 0; i < visibleEnemies.length; i++) {
+      visibleEnemies[i].update();
+      visibleEnemies[i].display();
+
+      if (currentImageIndex === 1) { // Assuming Bninja2.png is the attack image index
+        let attackWidth = images[currentImageIndex].width;
+        let attackHeight = images[currentImageIndex].height;
+        let attackYOffset = 15; // Adjust this value as needed
+
+        if (checkCollision(
+          width / 2.5 - attackWidth / 2, yPos - attackHeight / 2 + attackYOffset, attackWidth, attackHeight - 2 * attackYOffset, // Player attack area
+          visibleEnemies[i].x - visibleEnemies[i].image.width / 2, visibleEnemies[i].y - visibleEnemies[i].image.height / 2, // Enemy area
+          visibleEnemies[i].image.width, visibleEnemies[i].image.height
+        )) {
+          visibleEnemies.splice(i, 1);
+          enemiesHit++;
+        }
+      } else {
+        // Your existing collision check for other images
+        if (checkCollision(
+          width / 2.5 + 20, yPos - 50, 60, 130, // Player rectangle
+          visibleEnemies[i].x - 20, visibleEnemies[i].y - 20, 40, 40 // Enemy rectangle
+        )) {
+          if (!playerHit) {
+            lives -= 1;
+            img = ninjaProne;
+            ninjaProne.resize(80, 100);
+            playerHit = true;
+            setTimeout(() => {
+              img = images[currentImageIndex];
+              playerHit = false;
+            }, 1000);
+          }
         }
       }
     }
-  }
 
-  // -------------------------------------------------------------------------------------------------------- CHECKS
-  
-  if (lives <= 0) {
-    gameOver = true;
-  }
+    // -------------------------------------------------------------------------------------------------------- CHECKS
+    
+    if (lives <= 0) {
+      gameOver = true;
+    }
 
-  displayLives();
-  removeOffscreenEnemies();
-
+    displayLives();
+    removeOffscreenEnemies();
+  }  
 }
 
 // --------------------------------------------------------------------------------------------------------- KEYPRESS
@@ -327,7 +334,7 @@ function displayLives() {
   heartImage.resize(30, 30);
 
   textSize(20);
-  fill(255);
+  fill("black");
   text(lives + "/" + maxLives, displayTextX1, displayTextY);
 
 
@@ -348,7 +355,7 @@ function displayLives() {
   enemyImageDis.resize(30, 30);
   
   textSize(20);
-  fill(255);
+  fill("black");
   text("Enemies Hit: " + enemiesHit + "/" + maxVisibleEnemies, displayTextX2, displayTextY);
 }
 
@@ -399,6 +406,7 @@ function resetGame() {
   playerHit = false;
 
   displayLives();
+
 
   bg.resize(1200, 600); // Resize the background image
   bgX = 0; // Reset bgX after resizing
