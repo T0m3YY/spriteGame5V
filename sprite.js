@@ -66,7 +66,7 @@ function preload() {
 // --------------------------------------------------------------------------------------------------------- SETUP
 
 function setup() {
-  createCanvas(1200, 600);
+  createCanvas(1200, 600,);
 
   if (gameStarted) {
 

@@ -4,6 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ninja Slasher</title>
+    <style>
+        body {
+          background-image: image-set('spriteFotos/background1.jpg');
+          font-family: 'Arial', sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f0f0f0;
+        }
+
+        #game-container {
+          background-image: image-set('spriteFotos/background2.jpg');
+          height: 500px;
+          text-align: center;
+          padding: 20px;
+          background-color: #fff;
+          margin: 50px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+          margin: 50px; /* Add a margin to the canvas */
+        }
+
+        h1 {
+          margin-top: 10%;
+          color: #333;
+          font-size: 120px;
+        }
+
+        p {
+          color: #666;
+          font-size: 35px;
+        }
+        
+        img {
+          height: 130px;
+          width: 130px;
+        }
+
+        img#One {
+          width: 80px;
+        }
+
+        img#Two {
+          width: 250px;
+        }
+
+        button {
+          padding: 10px 20px;
+          font-size: 16px;
+          cursor: pointer;
+          background-color: #0e5210;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          margin: 10px;
+        }
+
+        button:hover {
+          background-color: #0e5210b4;
+        }
+
+        button#Start {
+          margin-right: 100px;
+        }
+        
+        .section {
+          text-align: center;
+          margin: 50px;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-section {
+          background-color: #f0f0f0;
+        }
+    </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="P5/p5.min.js"></script>
@@ -14,24 +94,35 @@
     <script src="P5/addons/p5.shape.js"></script>
     <script src="P5/addons/p5.sound.min.js"></script>
 
-
 </head>
 
 <body>
 
-  <div id="game-container">
-      <h1>Ninja Slasher</h1>
-      <p>Welcome to the Ninja Slasher game!</p>
-      <button onclick="startGame()">Start Game</button>
+    <div id="game-container">
+        <h1>Ninja Slasher</h1>
+        <p>Welcome to the Ninja Slasher game!</p>
+    </div>
 
-      <!-- Add any other content or elements for your landing page -->
-  </div>
+    <div class="section">
+        <h2>Game Explanation</h2>
+        <p>A brief explanation of the game here...</p>
 
-  <script src='sprite.js'></script>
+        <img id="One" src="spriteFotos/Bninja1.png" alt="">
+        <img id="Two" src="spriteFotos/Bninja2.png" alt="">
+        <img src="spriteFotos/Bninja3.png" alt="">
+        <img src="spriteFotos/Bninja4.png" alt="">
 
-  <button onclick="setLevel(1)">Level 1</button>
-  <button onclick="setLevel(2)">Level 2</button>
-  <button onclick="setLevel(3)">Level 3</button>
+    </div>
+
+    <div class="game-section section">
+      <button id="Start" onclick="startGame()">Start Game</button>
+
+      <button onclick="setLevel(1)">Level 1</button>
+      <button onclick="setLevel(2)">Level 2</button>
+      <button onclick="setLevel(3)">Level 3</button>
+    </div>
+
+    <script src='sprite.js'></script>
 
 
   <script>
