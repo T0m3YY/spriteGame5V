@@ -117,7 +117,7 @@
     </div>
 
     <div class="game-section section">
-      <button id="Start" onclick="resetGame(); startGame()">Start Game</button>
+      <button id="Start" onclick="startGame()">Start Game</button>
 
       <button onclick="resetGame(); setLevel(1)">Level 1</button>
       <button onclick="resetGame(); setLevel(2)">Level 2</button>
@@ -141,7 +141,10 @@
     let shouldRunGameLogic = false;
 
     function startGame() {
+      resetGame();
+
       gameStarted = true;
+
       setup();
       setLevel(1); // Set Level 1 immediately
     }
