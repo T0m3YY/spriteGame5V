@@ -40,10 +40,10 @@ var meterTotStop = 800;
 let distanceToStopEnd;
 
 
-var keyPrRR = 39; //------- data.json controls
-var keyPrRL = 37; //------- data.json controls
-var keyPrJU = 32; //------- data.json controls
-var keyPrAT = 65; //------- data.json controls 
+var keyPrRR = 39; //------- data.json controls optional
+var keyPrRL = 37; //------- data.json controls optional
+var keyPrJU = 32; //------- data.json controls optional
+var keyPrAT = 65; //------- data.json controls optional
 
 // --------------------------------------------------------------------------------------------------------- PRELOAD
 
