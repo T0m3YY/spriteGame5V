@@ -420,7 +420,6 @@ function resetGame() {
 
   displayLives();
 
-
   bg.resize(1200, 600); // Resize the background image
   bgX = 0; // Reset bgX after resizing
 }
