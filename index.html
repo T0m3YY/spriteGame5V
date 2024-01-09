@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,7 +72,7 @@
         button#Start {
           margin-right: 100px;
         }
-        
+
         .section {
           text-align: center;
           margin: 50px;
@@ -115,12 +117,20 @@
     </div>
 
     <div class="game-section section">
-      <button id="Start" onclick="startGame()">Start Game</button>
+      <button id="Start" onclick="resetGame(); startGame()">Start Game</button>
 
-      <button onclick="setLevel(1)">Level 1</button>
-      <button onclick="setLevel(2)">Level 2</button>
-      <button onclick="setLevel(3)">Level 3</button>
+      <button onclick="resetGame(); setLevel(1)">Level 1</button>
+      <button onclick="resetGame(); setLevel(2)">Level 2</button>
+      <button onclick="resetGame(); setLevel(3)">Level 3</button>
     </div>
+
+    <script>
+      window.onload = () => {
+        let input = document.querySelector("button");
+        input.addEventListener("click", () => input.blur());
+      }
+    </script>
+
 
     <script src='sprite.js'></script>
 
@@ -142,7 +152,7 @@
         1: {
           levelGame: 1,
           maxVisibleEnemies: 10,
-          time1ENEMY: 2000,
+          time1ENEMY: 2400,
           time2ENEMY: 3000,
           lives: 6,
           maxLives: 6,
@@ -152,8 +162,8 @@
         2: {
           levelGame: 2,
           maxVisibleEnemies: 20,
-          time1ENEMY: 900,
-          time2ENEMY: 1900,
+          time1ENEMY: 1200,
+          time2ENEMY: 2000,
           lives: 4,
           maxLives: 4,  
           speedEnemy: 6,  
@@ -166,7 +176,7 @@
           time2ENEMY: 1200,
           lives: 3,
           maxLives: 3,  
-          speedEnemy: 90, 
+          speedEnemy: 9, 
           bg: loadImage("spriteFotos/background2.jpg"),
         }
         }

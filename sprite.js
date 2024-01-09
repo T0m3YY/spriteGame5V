@@ -400,7 +400,6 @@ function resetGame() {
 
   enemiesHit = 0;
   visibleEnemies = [];
-  spawnEnemy();
 
   currentImageIndex = 0;
   img = images[currentImageIndex];
@@ -411,6 +410,8 @@ function resetGame() {
 
   direction = 1;
   playerHit = false;
+
+  spawnEnemy();
 
   displayLives();
 
