@@ -125,10 +125,12 @@
     </div>
 
     <script>
-      window.onload = () => {
-        let input = document.querySelector("button");
-        input.addEventListener("click", () => input.blur());
-      }
+      document.querySelectorAll("button").forEach( function(item) {
+        item.addEventListener('focus', function() {
+        this.blur();
+        })
+      })
+
     </script>
 
 
