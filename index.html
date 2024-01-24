@@ -42,16 +42,16 @@
         }
         
         img {
-          height: 130px;
-          width: 130px;
+          height: 100px;
+          width: 100px;
         }
 
         img#One {
-          width: 80px;
+          width: 60px;
         }
 
         img#Two {
-          width: 250px;
+          width: 200px;
         }
 
         button {
@@ -83,8 +83,42 @@
         }
 
         .game-section {
-          background-color: #f0f0f0;
+          background-color: #eeecec;
         }
+
+        .sectionGameExpl {
+          padding: 8px;
+          height: 100px;
+          background-color: #eeecec;
+          margin-bottom: 40px;
+        }
+
+        .section p {
+          font-size: 20px;
+        }
+
+        .flex-container {
+          padding: 20px;
+          display: flex;
+          flex-wrap: wrap; /* Zorgt ervoor dat items naar de volgende rij gaan als er geen ruimte is */
+          justify-content: space-between;
+          margin-right: 7%;
+          margin-left: 7%;
+        }
+
+        .flex-container div{
+          width: 400px;
+          text-align: left;
+        }
+
+        .flex-container div p{
+        }
+
+        .flex-container > div {
+          flex-basis: calc(50% - 10px); /* Bereken de breedte van elk item (50% - wat marge) */
+          margin-bottom: 20px;
+        }
+
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
@@ -106,16 +140,33 @@
     </div>
 
     <div class="section">
+      <div class="sectionGameExpl">
         <h2>Game Explanation</h2>
         <p>A brief explanation of the game here...</p>
-
-        <img id="One" src="spriteFotos/Bninja1.png" alt="">
-        <img id="Two" src="spriteFotos/Bninja2.png" alt="">
-        <img src="spriteFotos/Bninja3.png" alt="">
-        <img src="spriteFotos/Bninja4.png" alt="">
-
+      </div>
+        
+      <div class="flex-container">
+        <div>
+          <img id="One" src="spriteFotos/Bninja1.png" alt="">
+          <p>This is the default pose when doing nothing.</p>
+        </div>
+        <div>
+          <img id="Two" src="spriteFotos/Bninja2.png" alt="">
+          <p>Hit 'a', to attack the enemies and don't get hit!</p>
+        </div>
+        <div>
+          <img src="spriteFotos/Bninja3.png" alt="">
+          <p>Use the left and right arrow to move forwards or backwards.</p>
+        </div>
+        <div>
+          <img src="spriteFotos/Bninja4.png" alt="">
+          <p>Click the space-bar for jumping and to dodge the enemies.</p>
+        </div>
+      </div>
     </div>
 
+    
+    
     <div class="game-section section">
       <button id="Start" onclick="startGame()">Start Game</button>
 
