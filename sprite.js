@@ -45,6 +45,9 @@ var keyPrRL = 37; //------- data.json controls optional
 var keyPrJU = 32; //------- data.json controls optional
 var keyPrAT = 65; //------- data.json controls optional
 
+let timer;
+let countdownDuration = 10000;
+
 // --------------------------------------------------------------------------------------------------------- PRELOAD
 
 function preload() {
@@ -120,6 +123,38 @@ function draw() {
     // ----------------------------------------------------------------------------------------------------- END STOP
 
     distanceToStopEnd = abs(width / 2.5 - meterTotStop);
+
+    if (!gameOver) {
+      if (enemiesHit >= maxVisibleEnemies) {
+        stopEnd.resize(70, 160);
+        image(stopEnd, meterTotStop, height - 260);
+        updateDistanceIndicator(distanceToStopEnd);
+
+        // Check if the player is in the specified range and start the timer
+        if (distanceToStopEnd >= 0 && distanceToStopEnd <= 100) {
+          if (!timer) {
+            timer = millis();
+          }
+
+          // Calculate elapsed time
+          let elapsedTime = millis() - timer;
+
+          // Check if 10 seconds have passed
+          if (elapsedTime >= countdownDuration) {
+            // Game over
+            gameOver = true;
+            timer = null; // Reset the timer
+          }
+          
+          displayTimer(elapsedTime);
+          
+        } else {
+          // Reset the timer if the player is not in the specified range
+          timer = null;
+        }
+      }
+    }
+
 
     if (enemiesHit >= maxVisibleEnemies) {
       stopEnd.resize(70, 160)
@@ -225,11 +260,15 @@ function draw() {
       gameOver = true;
     }
 
+    
+
     displayLives();
     removeOffscreenEnemies();
   }  
 }
 
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -241,6 +280,9 @@ function draw() {
 
 ////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
 
@@ -371,6 +413,21 @@ function displayLives() {
   text("Enemies Hit: " + enemiesHit + "/" + maxVisibleEnemies, displayTextX2, displayTextY);
 }
 
+// --------------------------------------------------------------------------------------------------------- TIMER
+
+function displayTimer(elapsedTime) {
+  push();
+  fill(255);
+  textSize(20);
+  textAlign(RIGHT, CENTER);
+
+  let remainingTime = countdownDuration - elapsedTime;
+  let seconds = Math.ceil(remainingTime / 1000);
+
+  text(`Time: ${seconds}s`, width/2 - 20, height - 30);
+  pop();
+}
+
 // --------------------------------------------------------------------------------------------------------- COLLIDE
 
 function checkCollision(x1, y1, w1, h1, x2, y2, w2, h2) {
@@ -392,14 +449,33 @@ function drawGameOverScreen() {
   textAlign(CENTER, CENTER);
   textSize(60);
   fill(255);
-  text("GAME OVER", width / 2, height / 2 - 50);
+
+  if (lives > 0) {
+    text("YOU WON!!!", width / 2, height / 2 - 50);
+  } else {
+    text("GAME OVER", width / 2, height / 2 - 50);
+  }
   textSize(20);
   text("Press 'Enter' to continue", width / 2, height / 2 + 20);
+
+  // Display additional information in a white box
+  fill(255);
+  rect(width / 2 - 150, height / 2 + 80, 300, 100, 30); // Adjust the size of the white box as needed
+
+  // Display player's lives and kills
+  textSize(18);
+  fill(0);
+
+  text(`Lifes: ${lives}`, width / 2, height / 2 + 120);
+  text(`Kills: ${enemiesHit}`, width / 2, height / 2 + 150);
+  
   pop();
 }
 
+
 function resetGame() {
   gameOver = false;
+  timer = null;
 
   lives = maxLives;
 
@@ -438,5 +514,8 @@ function updateDistanceIndicator(distanceToStopEnd) {
   text(nf(distanceToStopEnd, 0, 0) + "m", width - 165, height - 135); // Display the text
   pop();
 }
+
+
+
 
 
