@@ -1,0 +1,133 @@
+  body {
+    background-image: image-set('spriteFotos/background1.jpg');
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+  }
+
+  #game-container {
+    background-image: image-set('spriteFotos/background2.jpg');
+    height: 500px;
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    margin: 50px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  canvas {
+    margin: 50px; /* Add a margin to the canvas */
+  }
+
+  h1 {
+    margin-top: 10%;
+    color: #333;
+    font-size: 120px;
+  }
+
+  p {
+    color: #666;
+    font-size: 35px;
+  }
+  
+  img {
+    height: 100px;
+    width: 100px;
+  }
+
+  img#One {
+    width: 60px;
+  }
+
+  img#Two {
+    width: 200px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #0e5210;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin: 10px;
+  }
+
+  button:hover {
+    background-color: #0e5210b4;
+  }
+
+  button#Start {
+    margin-right: 100px;
+  }
+
+  .section {
+    text-align: center;
+    margin: 50px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .game-section {
+    background-color: #eeecec;
+  }
+
+  .sectionGameExpl {
+    padding: 8px;
+    height: 100px;
+    background-color: #eeecec;
+    margin-bottom: 40px;
+  }
+
+  .section p {
+    font-size: 20px;
+  }
+
+  .headlineP {
+    text-align: left;
+    margin-left: calc(7% + 20px);
+  }
+
+  .flex-container {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap; /* Zorgt ervoor dat items naar de volgende rij gaan als er geen ruimte is */
+    justify-content: space-between;
+    margin-right: 7%;
+    margin-left: 7%;
+  }
+
+  .flex-container div {
+    padding: 20px;
+    width: 400px;
+    min-width: 240px;
+    text-align: left;
+  }
+
+  #firstFlex div {
+    background-color: #eeececbd;
+  }
+
+  #secondFlex div {
+    padding: 0;
+    flex-basis: calc(50% - 20px); /* Bereken de breedte van elk item (50% - wat marge) */
+    width: 400px;
+    min-width: 240px;
+  }
+  
+  #secondFlex img {
+    width: 100%;
+    min-width: 280px;
+    height: 250px;
+  }
+
+
+  .flex-container > div {
+    flex-basis: calc(50% - 80px); /* Bereken de breedte van elk item (50% - wat marge) */
+    margin-bottom: 40px;
+  }

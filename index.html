@@ -5,122 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ninja Slasher</title>
+    <title>Ninja Slasher (PC)</title>
     <style>
-        body {
-          background-image: image-set('spriteFotos/background1.jpg');
-          font-family: 'Arial', sans-serif;
-          margin: 0;
-          padding: 0;
-          background-color: #f0f0f0;
-        }
 
-        #game-container {
-          background-image: image-set('spriteFotos/background2.jpg');
-          height: 500px;
-          text-align: center;
-          padding: 20px;
-          background-color: #fff;
-          margin: 50px;
-          border-radius: 10px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        canvas {
-          margin: 50px; /* Add a margin to the canvas */
-        }
-
-        h1 {
-          margin-top: 10%;
-          color: #333;
-          font-size: 120px;
-        }
-
-        p {
-          color: #666;
-          font-size: 35px;
-        }
-        
-        img {
-          height: 100px;
-          width: 100px;
-        }
-
-        img#One {
-          width: 60px;
-        }
-
-        img#Two {
-          width: 200px;
-        }
-
-        button {
-          padding: 10px 20px;
-          font-size: 16px;
-          cursor: pointer;
-          background-color: #0e5210;
-          color: #fff;
-          border: none;
-          border-radius: 5px;
-          margin: 10px;
-        }
-
-        button:hover {
-          background-color: #0e5210b4;
-        }
-
-        button#Start {
-          margin-right: 100px;
-        }
-
-        .section {
-          text-align: center;
-          margin: 50px;
-          padding: 20px;
-          background-color: #fff;
-          border-radius: 10px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .game-section {
-          background-color: #eeecec;
-        }
-
-        .sectionGameExpl {
-          padding: 8px;
-          height: 100px;
-          background-color: #eeecec;
-          margin-bottom: 40px;
-        }
-
-        .section p {
-          font-size: 20px;
-        }
-
-        .flex-container {
-          padding: 20px;
-          display: flex;
-          flex-wrap: wrap; /* Zorgt ervoor dat items naar de volgende rij gaan als er geen ruimte is */
-          justify-content: space-between;
-          margin-right: 7%;
-          margin-left: 7%;
-        }
-
-        .flex-container div{
-          padding: 20px;
-          width: 400px;
-          min-width: 240px;
-          text-align: left;
-          background-color: #eeececbd;
-        }
-
-        .flex-container div p{
-        }
-
-        .flex-container > div {
-          flex-basis: calc(50% - 50px); /* Bereken de breedte van elk item (50% - wat marge) */
-          margin-bottom: 20px;
-        }
 
     </style>
 
@@ -132,6 +19,8 @@
     <!-- extra libraries -->
     <script src="P5/addons/p5.shape.js"></script>
     <script src="P5/addons/p5.sound.min.js"></script>
+
+    <link rel="stylesheet" href="sprite.css">
 
 </head>
 
@@ -148,24 +37,45 @@
         <p>A brief explanation of the game here...</p>
       </div>
         
-      <div class="flex-container">
-        <div>
-          <img id="One" src="spriteFotos/Bninja1.png" alt="">
-          <p>This is the default pose when doing nothing.</p>
+      <section>
+        <h2 class="headlineP">Controls</h2>
+
+        <div id="firstFlex" class="flex-container">
+          <div>
+            <img id="One" src="spriteFotos/Bninja1.png" alt="">
+            <p>This is the default pose when doing nothing.</p>
+          </div>
+          <div>
+            <img id="Two" src="spriteFotos/Bninja2.png" alt="">
+            <p>Hit 'a', to attack the enemies and don't get hit!</p>
+          </div>
+          <div>
+            <img src="spriteFotos/Bninja3.png" alt="">
+            <p>Use the left and right arrow to move forwards or backwards.</p>
+          </div>
+          <div>
+            <img src="spriteFotos/Bninja4.png" alt="">
+            <p>Click the space-bar for jumping and to dodge the enemies.</p>
+          </div>
         </div>
-        <div>
-          <img id="Two" src="spriteFotos/Bninja2.png" alt="">
-          <p>Hit 'a', to attack the enemies and don't get hit!</p>
+      </section>
+
+      <section>
+        <h2 class="headlineP">Game purpose</h2>
+
+        <div id="secondFlex" class="flex-container">
+          <div class="gameExplane">
+            <img src="spriteFotos/gameplayEEN.png" alt="">
+            <p>The aim of the game is to survive and defeat as many enemies as possible and ultimately survive with as many hearts as possible, this becomes more difficult as the levels increase</p>
+          </div>
+  
+          <div class="gameExplane">
+            <img src="spriteFotos/gameplayTWEE.png" alt="">
+            <p>If the number of defeated enemies at the top right is equal to the required level score, a safe spot will be created. Here the game ends after 10 seconds and you can see your results.</p>
+          </div>
         </div>
-        <div>
-          <img src="spriteFotos/Bninja3.png" alt="">
-          <p>Use the left and right arrow to move forwards or backwards.</p>
-        </div>
-        <div>
-          <img src="spriteFotos/Bninja4.png" alt="">
-          <p>Click the space-bar for jumping and to dodge the enemies.</p>
-        </div>
-      </div>
+      </section>
+      
     </div>
 
     
