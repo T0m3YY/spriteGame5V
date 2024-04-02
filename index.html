@@ -1,1 +1,176 @@
-indr.html
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="Ninja Slasher">
+    <meta property="og:description" content="Game made by a student (TPS dG) as coding project, a Ninja SLasher game; survive and try to complete te level with the most hearts and kills!">
+    <meta property="og:image" content="spriteFotos/openGraphImage.png">
+    <meta property="og:url" content="https://t0m3yy.github.io/spriteGame5V/">
+
+    <title>Ninja Slasher (PC)</title>
+    <style>
+
+
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="P5/p5.min.js"></script>
+    <script src="P5/p5.js"></script>
+    <script src="P5/p5.min.js"></script>
+    
+    <!-- extra libraries -->
+    <script src="P5/addons/p5.shape.js"></script>
+    <script src="P5/addons/p5.sound.min.js"></script>
+
+    <link rel="stylesheet" href="sprite.css">
+
+</head>
+
+<body>
+
+    <div id="game-container">
+        <h1>Ninja Slasher</h1>
+        <p>Welcome to the Ninja Slasher game!</p>
+    </div>
+
+    <div class="section">
+      <div class="sectionGameExpl">
+        <h2>Game Explanation</h2>
+        <p>A brief explanation of the game here...</p>
+      </div>
+        
+      <section>
+        <h2 class="headlineP">Controls</h2>
+
+        <div id="firstFlex" class="flex-container">
+          <div>
+            <img id="One" src="spriteFotos/Bninja1.png" alt="">
+            <p>This is the default pose when doing nothing.</p>
+          </div>
+          <div>
+            <img id="Two" src="spriteFotos/Bninja2.png" alt="">
+            <p>Hit 'a', to attack the enemies and don't get hit!</p>
+          </div>
+          <div>
+            <img src="spriteFotos/Bninja3.png" alt="">
+            <p>Use the left and right arrow to move forwards or backwards.</p>
+          </div>
+          <div>
+            <img src="spriteFotos/Bninja4.png" alt="">
+            <p>Click the space-bar for jumping and to dodge the enemies.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="headlineP">Game purpose</h2>
+
+        <div id="secondFlex" class="flex-container">
+          <div class="gameExplane">
+            <img src="spriteFotos/gameplayEEN.png" alt="">
+            <p>The aim of the game is to survive and defeat as many enemies as possible and ultimately survive with as many hearts as possible, this becomes more difficult as the levels increase</p>
+          </div>
+  
+          <div class="gameExplane">
+            <img src="spriteFotos/gameplayTWEE.png" alt="">
+            <p>If the number of defeated enemies at the top right is equal to the required level score, a safe spot will be created. Here the game ends after 10 seconds and you can see your results.</p>
+          </div>
+        </div>
+      </section>
+      
+    </div>
+
+    
+    
+    <div class="game-section section">
+      <button id="Start" onclick="startGame()">Start Game</button>
+
+      <button onclick="resetGame(); setLevel(1)">Level 1</button>
+      <button onclick="resetGame(); setLevel(2)">Level 2</button>
+      <button onclick="resetGame(); setLevel(3)">Level 3</button>
+    </div>
+
+    <script>
+      document.querySelectorAll("button").forEach( function(item) {
+        item.addEventListener('focus', function() {
+        this.blur();
+        })
+      })
+
+    </script>
+
+
+    <script src='sprite.js'></script>
+
+
+  <script>
+    
+    let gameStarted = false;
+    let shouldRunGameLogic = false;
+
+    function startGame() {
+      resetGame();
+
+      gameStarted = true;
+
+      setup();
+      setLevel(1); // Set Level 1 immediately
+    }
+
+    function setLevel(level) {      
+
+        const settings = {
+        1: {
+          levelGame: 1,
+          maxVisibleEnemies: 10,
+          time1ENEMY: 2400,
+          time2ENEMY: 3000,
+          lives: 6,
+          maxLives: 6,
+          speedEnemy: 4,
+          bg: loadImage("spriteFotos/background1.jpg"),
+        },
+        2: {
+          levelGame: 2,
+          maxVisibleEnemies: 20,
+          time1ENEMY: 1200,
+          time2ENEMY: 2000,
+          lives: 4,
+          maxLives: 4,  
+          speedEnemy: 6,  
+          bg: loadImage("spriteFotos/background1.jpg"),        
+        },
+        3: {
+          levelGame: 3,
+          maxVisibleEnemies: 30,
+          time1ENEMY: 800,
+          time2ENEMY: 1200,
+          lives: 3,
+          maxLives: 3,  
+          speedEnemy: 9, 
+          bg: loadImage("spriteFotos/background2.jpg"),
+        }
+        }
+    
+
+      levelGame = settings[level].levelGame;
+      maxVisibleEnemies = settings[level].maxVisibleEnemies;
+      time1ENEMY = settings[level].time1ENEMY;
+      time2ENEMY = settings[level].time2ENEMY;
+      lives = settings[level].lives;
+      maxLives = settings[level].maxLives;
+      speedEnemy = settings[level].speedEnemy;
+      bg = settings[level].bg;
+
+      console.log(`Switched to Level ${level}`);
+    }
+  </script>
+</body>
+
+
+</html>
+
