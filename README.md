@@ -1,3 +1,5 @@
-Dit is game gemaakt voor informatica, een uitleg video hieronder: 
+<h1>Game maken;</h1>
 
-  https://drive.google.com/file/d/1C6FlZ2ixcPDJPlOhdgHuc_-UoSVPpGVv/view?usp=sharing
+<p>Dit is game gemaakt voor informatica, een uitleg video hieronder: </p>
+
+<a href="https://drive.google.com/file/d/1C6FlZ2ixcPDJPlOhdgHuc_-UoSVPpGVv/view?usp=sharing">Uitlegvideo</a>
